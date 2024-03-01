@@ -3,6 +3,7 @@ import cors from 'cors';
 import rotaCategoria from './Rotas/rotaCategoria.js';
 import rotaProduto from './Rotas/rotaProduto.js';
 import rotaLogin from './Rotas/rotaLogin.js';
+import rotaPedido from './Rotas/rotaPedido.js';
 import dotenv from 'dotenv';
 import session from 'express-session';
 import { verificarAcesso } from './Seguranca/autenticacao.js';
@@ -29,6 +30,7 @@ app.use('/login',rotaLogin);
 //verificarAcesso passa a ser middleware = camada do meio
 app.use('/categoria',verificarAcesso,rotaCategoria);
 app.use('/produto',verificarAcesso,rotaProduto);
+app.use('/pedido',verificarAcesso,rotaPedido);
 
 app.listen(porta, host, ()=>{
     console.log(`Servidor escutando na porta ${host}:${porta}.`);
