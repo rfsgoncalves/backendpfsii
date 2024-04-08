@@ -94,7 +94,7 @@ export default class ProdutoDAO {
                 listaProdutos.push(produto);
             }
         }
-
+        global.poolConexoes.releaseConnection(conexao);
         return listaProdutos;
     }
 }

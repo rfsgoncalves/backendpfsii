@@ -7,9 +7,10 @@ import rotaPedido from './Rotas/rotaPedido.js';
 import dotenv from 'dotenv';
 import session from 'express-session';
 import { verificarAcesso } from './Seguranca/autenticacao.js';
+import rotaCliente from './Rotas/rotaCliente.js';
 
 const host='0.0.0.0';
-const porta='3000';
+const porta='4000';
 
 dotenv.config();
 
@@ -28,9 +29,10 @@ app.use(session({
 
 app.use('/login',rotaLogin);
 //verificarAcesso passa a ser middleware = camada do meio
-app.use('/categoria',verificarAcesso,rotaCategoria);
-app.use('/produto',verificarAcesso,rotaProduto);
-app.use('/pedido',verificarAcesso,rotaPedido);
+app.use('/cliente',rotaCliente);
+app.use('/categoria',/*verificarAcesso,*/rotaCategoria);
+app.use('/produto',/*verificarAcesso,*/rotaProduto);
+app.use('/pedido',/*verificarAcesso,*/rotaPedido);
 
 app.listen(porta, host, ()=>{
     console.log(`Servidor escutando na porta ${host}:${porta}.`);

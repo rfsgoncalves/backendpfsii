@@ -1,104 +1,143 @@
-export default class Cliente {
-    #codigo;
-    #nome;
-    #telefone;
-    #endereco;
+import ClienteDAO from '../Persistencia/ClienteDAO.js';
 
-    constructor(codigo, nome, telefone, endereco) {
-        this.#codigo = codigo;
+export default class Cliente{
+
+    #codigo;
+    #cpf;  //# define que um atributo seja privado
+    #nome;
+    #endereco;
+    #bairro;
+    #cidade;
+    #uf;
+    #telefone;
+    #email;
+
+    //método construtor que define as informações necessárias para se criar um cliente
+    constructor(codigo, cpf, nome, endereco, bairro, cidade, uf, telefone, email){
+        this.#codigo= codigo;
+        this.#cpf = cpf;
         this.#nome = nome;
-        this.#telefone = telefone;
         this.#endereco = endereco;
+        this.#bairro = bairro;
+        this.#cidade = cidade;
+        this.#uf = uf;
+        this.#telefone = telefone;
+        this.#email = email;
+        
     }
 
-    // Métodos de acesso (get) e modificação (set)
-
-    // Código
-    get codigo() {
+    get codigo(){
         return this.#codigo;
     }
 
-    set codigo(novoCodigo) {
-        if (novoCodigo === "" || typeof novoCodigo !== "number") {
-            console.log("Formato de dado inválido");
-        } else {
-            this.#codigo = novoCodigo;
-        }
+    set codigo(novoCodigo){
+        this.codigo = novoCodigo;
     }
 
-    // Nome
-    get nome() {
+    get cpf(){
+        return this.#cpf;
+    }
+
+    set cpf(novoCpf){
+        this.#cpf = novoCpf;
+    }
+
+    get nome(){
         return this.#nome;
     }
 
-    set nome(novoNome) {
-        if (novoNome === "") {
-            console.log("Dado não preenchido");
-        } else {
+    set nome(novoNome){
+        if(novoNome != "") //regra de negócio que impede que clientes existam com nomes vazios
             this.#nome = novoNome;
-        }
     }
 
-    // Telefone
-    get telefone() {
-        return this.#telefone;
-    }
-
-    set telefone(novoTelefone) {
-        if (novoTelefone === "" || novoTelefone.length !== 11) {
-            console.log("Formato de telefone inválido");
-        } else {
-            this.#telefone = novoTelefone;
-        }
-    }
-
-    // Endereço
     get endereco() {
         return this.#endereco;
     }
 
-    set endereco(novoEndereco) {
-        if (novoEndereco === "") {
-            console.log("Dado não preenchido");
-        } else {
-            this.#endereco = novoEndereco;
+    set endereco(novoEnd){
+        this.#endereco = novoEnd;
+    }
+
+    get bairro(){
+        return this.#bairro;    
+    }
+    
+    set bairro(novoBairro){
+        this.#bairro = novoBairro;
+    }
+
+    get cidade(){
+        return this.#cidade;
+    }
+
+    set cidade(novaCidade){
+        this.#cidade = novaCidade;
+    }
+
+    get uf(){
+        return this.#uf;
+    }
+    
+    set uf(novaUf){
+        this.#uf=novaUf;
+    }
+
+    get telefone(){
+        return this.#telefone;
+    }
+
+    set telefone(novoTel){
+        this.#telefone = novoTel;
+    }
+
+    get email(){
+        return this.#email;
+    }
+
+    set email(novoEmail){
+        this.#email = novoEmail;
+    }
+    
+    //override ou sobrescrita do método toJSON
+    toJSON(){
+        return {
+            "codigo"   : this.#codigo,
+            "cpf"      : this.#cpf,
+            "nome"     : this.#nome,
+            "endereco" : this.#endereco,
+            "bairro"   : this.#bairro,
+            "cidade"   : this.#cidade,
+            "uf"       : this.#uf,
+            "telefone" : this.#telefone,
+            "email"    : this.#email
         }
     }
 
-    // JSON
-    toJSON() {
-        return {
-            'codigo': this.#codigo,
-            'nome': this.#nome,
-            'telefone': this.#telefone,
-            'endereco': this.#endereco
-        };
-    }
-
-    async gravar() {
+    async gravar(){
         const clienteDAO = new ClienteDAO();
-        this.codigo = await clienteDAO.adicionar(this);
+        await clienteDAO.incluir(this);
     }
 
     async atualizar() {
-        const clienteDAO = new ClienteDAO();
-        await clienteDAO.alterar(this);
+        const clienteBD = new ClienteDAO();
+        await clienteBD.alterar(this);
     }
 
-    async apagar() {
-        const clienteDAO = new ClienteDAO();
-        await clienteDAO.deletar(this);
+    async removerDoBancoDados() {
+        const clienteBD = new ClienteDAO();
+        await clienteBD.excluir(this);
     }
 
-    async consultarPorNome(nome) {
-        const clienteDAO = new ClienteDAO();
-        const listaClientes = await clienteDAO.consultar(nome);
-        return listaClientes;
+    async consultar(termo){
+        const clienteBD = new ClienteDAO();
+        const clientes = await clienteBD.consultar(termo);
+        return clientes;
     }
 
-    async consultarPorTelefone(telefone) {
-        const clienteDAO = new ClienteDAO();
-        const listaClientes = await clienteDAO.consultarTelefone(telefone);
-        return listaClientes;
+    async consultarCPF(cpf){
+        const clienteBD = new ClienteDAO();
+        const clientes = await clienteBD.consultarCPF(cpf);
+        return clientes;
     }
 }

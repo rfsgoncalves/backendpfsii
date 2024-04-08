@@ -10,7 +10,7 @@ export default class PedidoCtrl{
             const dados = requisicao.body;
             //extraindo dados de um novo pedido
             const cliente = dados.cliente;
-            const dataPedido = dados.dataPedido;
+            const dataPedido = new Date(dados.dataPedido).toLocaleDateString();
             const totalPedido = dados.totalPedido;
             const itensPedido = dados.itens;
             //instanciando um objeto do tipo Pedido
